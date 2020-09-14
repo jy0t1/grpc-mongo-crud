@@ -1,0 +1,72 @@
+ // protoc proto/myBook.proto --go_out=plugins=grpc:.
+syntax = "proto3";
+
+//Import "google/protobuf/timestamp.proto";
+
+package book;
+// Source .proto files should contain a go_package option specifying the full Go import path for the file
+// This will also create a package of the folder name. 
+// To make package name different from folder name use semicolon - the .pb.go file should have a package "book" statement
+
+option go_package = "grpc-mongo-crud/proto;bookpb";
+
+message Book {
+    int64 id = 1;
+    string name = 2;
+    string author = 3;
+    string authorEmail = 4;
+    //google.protobuf.Timestamp published = 5;
+    string published = 5;
+    int64 pages = 6;
+    string publisher = 7;
+    bool isAvailable = 8;
+    string category = 9;
+    string bindType = 10;
+    string photoPath = 11;
+}
+
+message CreateBookReq {
+    Book book = 1; // Book id blank
+}
+
+message CreateBookRes {
+    Book book = 1; // Book id filled in
+}
+
+message ReadBookReq {
+    int64 id = 1;
+}
+
+message ReadBookRes {
+    Book book = 1;
+}
+
+message UpdateBookReq {
+    Book book = 1;
+}
+
+message UpdateBookRes {
+    Book book = 1;
+}
+
+message DeleteBookReq {
+    int64 id = 1;
+}
+
+message DeleteBookRes {
+    bool success = 1;
+}
+
+message ListBooksReq {}
+
+message ListBooksRes {
+    Book book = 1;
+}
+
+service BookService {
+    rpc CreateBook(CreateBookReq) returns (CreateBookRes);
+    rpc ReadBook(ReadBookReq) returns (ReadBookRes);
+    rpc UpdateBook(UpdateBookReq) returns (UpdateBookRes);
+    rpc DeleteBook(DeleteBookReq) returns (DeleteBookRes);
+    rpc ListBooks(ListBooksReq) returns (stream ListBooksRes);
+}
